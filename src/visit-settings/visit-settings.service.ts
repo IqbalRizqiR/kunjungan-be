@@ -12,10 +12,15 @@ export class VisitSettingsService {
   }
 
   async add(data: { allowedWeekday: number }) {
-    return this.prisma.visitSetting.create({
-      data: {
-        allowedWeekday: data.allowedWeekday,
-      },
+    const firstSetting = await this.prisma.visitSetting.findFirst({
+      orderBy: { allowedWeekday: 'asc' },
+    });
+    if (!firstSetting) {
+      throw new NotFoundException('No visit settings available to update');
+    }
+    return this.prisma.visitSetting.update({
+      where: { id: firstSetting.id },
+      data: { allowedWeekday: data.allowedWeekday },
     });
   }
 
