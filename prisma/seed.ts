@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { hash } from 'bcrypt-ts' // Use bcrypt-ts for hashing
 
 const prisma = new PrismaClient()
 
@@ -6,7 +7,7 @@ async function main() {
   // 1) Upsert Admin User
   const adminEmail = 'admin@example.com'
   const plainPassword = 'admin123'
-  const hashedPassword = await bcrypt.hash(plainPassword, 10)
+  const hashedPassword = await hash(plainPassword, 10)
 
   await prisma.user.upsert({
     where: { email: adminEmail },
