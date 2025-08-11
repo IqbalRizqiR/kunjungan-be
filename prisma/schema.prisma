@@ -40,11 +40,21 @@ model Visit {
   specialRequest String?
   createdAt      DateTime    @default(now())
   packageOption  String?
+  tujuanId        String?
   updatedAt      DateTime    @updatedAt
   @@unique([sessionId, visitDate])
   user           User        @relation(fields: [userId], references: [id])
   session        Session     @relation(fields: [sessionId], references: [id])
   institution    Institution @relation(fields: [institutionId], references: [id])
+  tujuan         Tujuan?     @relation(fields: [tujuanId], references: [id])
+}
+
+model Tujuan {
+  id        String   @id @default(cuid())
+  name      String
+  visits   Visit[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Session {

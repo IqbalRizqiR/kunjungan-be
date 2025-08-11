@@ -15,6 +15,7 @@ export class VisitsService {
   firstName: string,
   lastName: string,
   email: string,
+  tujuanId: string,
   phoneNumber: string,
   visitDate: Date, // Tanggal kunjungan
   visitors: string, // e.g. "John Doe, Jane Doe"
@@ -55,6 +56,7 @@ export class VisitsService {
       sessionId: sessionId,
       visitDate: new Date(visitDate).toISOString(), // Convert to ISO string
       visitors,
+      tujuanId: tujuanId, // Assuming tujuanId is a string
       status: status ? status : 'PENDING', // Default status
       institutionId,
       startTime: startTime ? startTime : "null", // Set default date
@@ -62,7 +64,7 @@ export class VisitsService {
       packageOption,
       specialRequest,
     },
-      include: { user: true, session: true, institution: true }
+      include: { user: true, session: true, institution: true, tujuan: true },
     });
 
     // 5. (Optional) Emit Notification ke Admin via WebSocket

@@ -22,6 +22,7 @@ export class VisitsController {
     @Body('endTime') endTime: string, // e.g. "11:00",
     @Body('packageOption') packageOption: string | null,
     @Body('status') status: VisitStatus | null,
+    @Body('tujuanId') tujuan: string, // Assuming tujuanId is a string
     @Body('lastName') lastName: string,
     @Body('email') email: string,
     @Body('phoneNumber') phoneNumber: string,
@@ -31,6 +32,7 @@ export class VisitsController {
       firstName, 
       lastName, 
       email, 
+      tujuan,
       phoneNumber, 
       visitDate, 
       visitors, 

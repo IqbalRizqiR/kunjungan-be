@@ -13,9 +13,10 @@ import { PrismaService } from 'prisma/prisma.service';
 import { VisitSettingsModule } from './visit-settings/visit-settings.module';
 import { MailModule } from './mail.module';
 import { NotificationGateway } from './NotificationGateway';
+import { TujuanModule } from './tujuan/tujuan.module';
 
 @Module({
-  imports: [AuthModule, MailModule, VisitSettingsModule, UsersModule, VisitsModule, SessionsModule, InstitutionsModule, EventsModule, SettingsModule, NotificationsModule, VisitSettingsModule],
+  imports: [AuthModule, MailModule, TujuanModule, VisitSettingsModule, UsersModule, VisitsModule, SessionsModule, InstitutionsModule, EventsModule, SettingsModule, NotificationsModule, VisitSettingsModule, TujuanModule],
   controllers: [AppController],
   providers: [AppService, PrismaService, NotificationGateway],
   exports: [PrismaService, NotificationGateway], // Export PrismaService for use in other modules
