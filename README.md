@@ -29,7 +29,14 @@
 
 ```bash
 $ npm install
+$ npx prisma migrate dev
+$ npm run start:dev
+
 ```
+
+## User default
+email : admin@admin.com
+password : password
 
 ## Compile and run the project
 
