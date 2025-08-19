@@ -31,28 +31,29 @@ model Visit {
   id             String      @id @default(cuid())
   userId         String
   sessionId      String
-  startTime      String   @default("")
-  endTime        String   @default("")
-  institutionId  String  @default("")
+  startTime      String      @default("")
+  endTime        String      @default("")
+  institutionId  String      @default("")
   status         VisitStatus @default(PENDING)
-  visitDate     DateTime
+  visitDate      DateTime
   visitors       String
   specialRequest String?
   createdAt      DateTime    @default(now())
   packageOption  String?
-  tujuanId        String?
+  tujuanId       String?
   updatedAt      DateTime    @updatedAt
-  @@unique([sessionId, visitDate])
   user           User        @relation(fields: [userId], references: [id])
   session        Session     @relation(fields: [sessionId], references: [id])
   institution    Institution @relation(fields: [institutionId], references: [id])
   tujuan         Tujuan?     @relation(fields: [tujuanId], references: [id])
+  package        Package?    @relation(fields: [packageOption], references: [name])
+  @@unique([sessionId, visitDate])
 }
 
 model Tujuan {
   id        String   @id @default(cuid())
   name      String
-  visits   Visit[]
+  visits    Visit[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -67,24 +68,25 @@ model Session {
 }
 
 model Institution {
-  id        String   @id @default(cuid())
-  name      String
-  isPaid    Boolean
-  price     Int?
-  visits    Visit[]
-  packages  Package[]
-  packageOption  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String    @id @default(cuid())
+  name          String
+  isPaid        Boolean
+  price         Int?
+  visits        Visit[]
+  packages      Package[]
+  packageOption String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Package {
-  id             String       @id @default(uuid())
-  name           String
-  value          String
-  price          Int
-  institutionId  String
-  institution    Institution  @relation(fields: [institutionId], references: [id])
+  id            String      @id @default(uuid())
+  name          String      @unique
+  value         String
+  visits        Visit[]
+  price         Int
+  institutionId String
+  institution   Institution @relation(fields: [institutionId], references: [id])
 }
 
 model Event {

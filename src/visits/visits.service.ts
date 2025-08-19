@@ -85,7 +85,7 @@ export class VisitsService {
   async approveVisit(id: string) {
     const visit = await this.prisma.visit.findUnique({
       where: { id },
-      include: { user: true, session: true, institution: true },
+      include: { user: true, session: true, institution: true, package: true, },
     });
     if (!visit) {
       throw new NotFoundException('Visit not found');
@@ -99,15 +99,6 @@ export class VisitsService {
       where: { id },
       data: { status: 'APPROVED' },
     });
-
-    // Send Email Notification
-    const emailBody = `
-      <h1>Booking Approved!</h1>
-      <p>Dear ${visit.user.firstName + ' ' + visit.user.lastName},</p>
-      <p>Your visit booking on <b>${visit.visitDate.toDateString()}</b> from ${visit.session.startTime} to ${visit.session.endTime} has been approved.</p>
-      ${visit.institution.isPaid ? `<p>Please proceed to payment: Rp ${visit.institution.price}</p>` : '<p>This visit is free of charge.</p>'}
-    `;
-    await this.mailService.sendMail(visit.user.email, 'Your Visit Booking Approved', emailBody);
 
     return { message: 'Visit approved & email sent' };
   }
@@ -124,7 +115,7 @@ export class VisitsService {
     return visit;
   }
   async getSessionAvailabilityByMonth(month: number, year: number) {
-    const startDate = new Date(year, month - 1, 1);
+    const startDate = new Date(year, month - 1);
     const endDate = new Date(year, month, 0);
 
     // Get all visits within this month
@@ -149,8 +140,9 @@ export class VisitsService {
 
     const daysInMonth = new Date(year, month, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(year, month - 1, day);
+      const date = new Date(year, month - 1, day + 1);
       const dateStr = date.toISOString().split('T')[0];
+      // console.log("dateStr : " + dateStr)
 
       const bookedSessionIds = visits
         .filter((v) => v.visitDate.toISOString().split('T')[0] === dateStr)
@@ -179,7 +171,7 @@ export class VisitsService {
 
     // Fetch allowed weekdays from visit settings table
     const visitSettings = await this.prisma.visitSetting.findFirst();
-    const allowedDays = visitSettings?.allowedWeekday ?? [];
+    const allowedDays = visitSettings?.allowedWeekday;
 
     for (const dateStr in availabilityMap) {
       const dateObj = new Date(dateStr);
@@ -228,7 +220,7 @@ export class VisitsService {
   : {};
     return this.prisma.visit.findMany({
         where,
-        include: { user: true, session: true, institution: true },
+        include: { user: true, session: true, institution: true, package: true, },
     });
     }
 }

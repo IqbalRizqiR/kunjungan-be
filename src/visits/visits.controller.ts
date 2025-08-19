@@ -52,7 +52,7 @@ export class VisitsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Patch(':id/approve')
-  async approveVisit(@Param('id', ParseUUIDPipe) id: string) {
+  async approveVisit(@Param('id') id: string) {
     return this.visitService.approveVisit(id);
   }
 
@@ -69,7 +69,7 @@ export class VisitsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Patch(':id/reject')
-  async rejectVisit(@Param('id', ParseUUIDPipe) id: string) {
+  async rejectVisit(@Param('id') id: string) {
     return this.visitService.rejectVisit(id);
   }
 
